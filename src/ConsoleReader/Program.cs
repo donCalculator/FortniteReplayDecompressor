@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Unreal.Core.Models.Enums;
+using static System.Environment;
 
 namespace ConsoleReader;
 
@@ -19,7 +20,7 @@ internal class Program
         var provider = serviceCollection.BuildServiceProvider();
         var logger = provider.GetService<ILogger<Program>>();
 
-        //var localAppDataFolder = GetFolderPath(SpecialFolder.LocalApplicationData);
+        var localAppDataFolder = GetFolderPath(SpecialFolder.LocalApplicationData);
         //var replayFilesFolder = Path.Combine(localAppDataFolder, @"FortniteGame\Saved\Demos");
         //var replayFilesFolder = @"F:\Projects\FortniteReplayCollection\_upload\";
         var replayFilesFolder = @"C:\Users\ferro\Downloads\";
