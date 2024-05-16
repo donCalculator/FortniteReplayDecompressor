@@ -26,6 +26,7 @@ public class FortniteReplayBuilder
     private readonly Dictionary<uint, List<QueuedPlayerPawn>> _queuedPlayerPawns = new();
 
     private readonly HashSet<uint> _onlySpectatingPlayers = new();
+    private readonly HashSet<uint> _nonPlayerCharacters = new();
     private readonly Dictionary<uint, PlayerData> _players = new();
     private readonly Dictionary<int?, TeamData> _teams = new();
     private readonly Dictionary<uint, Llama> _llamas = new();
@@ -199,6 +200,17 @@ public class FortniteReplayBuilder
         }
 
         if (_onlySpectatingPlayers.Contains(channelIndex))
+        {
+            return;
+        }
+
+        if (state.bIsAnAthenaGameParticipant == false)
+        {
+            _nonPlayerCharacters.Add(channelIndex);
+            return;
+        }
+
+        if (_nonPlayerCharacters.Contains(channelIndex))
         {
             return;
         }
