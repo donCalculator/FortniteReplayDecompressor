@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -568,10 +568,10 @@ public class NetFieldParser
     }
 
     /// <summary>
-    /// Create the object associated with the NetFieldExportGroup. 
+    /// Create a new instance of the object associated with the NetFieldExportGroup. 
     /// </summary>
-    /// <param name="group"></param>
-    /// <returns></returns>
+    /// <param name="group">The group name</param>
+    /// <returns>A new instance of the object associated with the group, or null if the group doesn't exist</returns>
     public INetFieldExportGroup? CreateType(string group)
     {
         if (!NetFieldGroups.TryGetValue(group, out var exportGroup))
@@ -580,15 +580,9 @@ public class NetFieldParser
         }
 
         var cachedEntry = _objects[exportGroup.TypeId];
+        var newInstance = Activator.CreateInstance(cachedEntry.Instance.GetType()); // Create a new instance
 
-        for (var i = 0; i < cachedEntry.ChangedProperties.Count; i++)
-        {
-            var fieldInfo = cachedEntry.ChangedProperties[i];
-            fieldInfo.SetMethod(cachedEntry.Instance, fieldInfo.DefaultValue);
-        }
-
-        cachedEntry.ChangedProperties.Clear();
-        return cachedEntry.Instance;
+        return (INetFieldExportGroup) newInstance;
     }
 
     /// <summary>
