@@ -24,8 +24,8 @@ public class LaunchPad : INetFieldExportGroup
     [NetFieldExport("Role", RepLayoutCmdType.Ignore)]
     public int? Role { get; set; }
 
-    [NetFieldExport("OwnerPersistentID", RepLayoutCmdType.PropertyUInt32)]
-    public uint OwnerPersistentID { get; set; }
+    [NetFieldExport("OwnerPersistentID", RepLayoutCmdType.PropertyObject)]
+    public uint? OwnerPersistentID { get; set; }
 
     [NetFieldExport("bPlayerPlaced", RepLayoutCmdType.PropertyBool)]
     public bool? bPlayerPlaced { get; set; }

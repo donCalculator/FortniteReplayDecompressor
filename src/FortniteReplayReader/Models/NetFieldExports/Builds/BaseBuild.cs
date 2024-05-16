@@ -16,7 +16,7 @@ public abstract class BaseBuild : INetFieldExportGroup
     [NetFieldExport("Role", RepLayoutCmdType.Ignore)]
     public int? Role { get; set; }
 
-    [NetFieldExport("OwnerPersistentID", RepLayoutCmdType.PropertyUInt32)]
+    [NetFieldExport("OwnerPersistentID", RepLayoutCmdType.PropertyObject)]
     public uint? OwnerPersistentID { get; set; }
 
     [NetFieldExport("bDestroyed", RepLayoutCmdType.PropertyBool)]
