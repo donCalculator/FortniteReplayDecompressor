@@ -217,11 +217,41 @@ public class ReplayReader : Unreal.Core.ReplayReader<FortniteReplay>
             return;
         }
 
+        else if (info.Metadata == ReplayEventTypes.TIMECODE_VERSIONED_META)
+        {
+            ParseTimecodeVersionedEvent(decryptedArchive, info);
+            return;
+        }
+
+        else if (info.Metadata == ReplayEventTypes.ADDITION_GFP_EVENT)
+        {
+            ParseAdditionGFPEvent(decryptedArchive, info);
+            return;
+        }
+
         _logger?.LogDebug("Unknown event {group} ({metadata}) of size {sizeInBytes}", info.Group, info.Metadata, info.SizeInBytes);
         if (IsDebugMode)
         {
             throw new UnknownEventException($"Unknown event {info.Group} ({info.Metadata}) of size {info.SizeInBytes}");
         }
+    }
+    public virtual void ParseAdditionGFPEvent(FArchive archive, EventInfo info)
+    {
+        // TODO: handle event data
+        var version = archive.ReadInt32();
+        var a = archive.ReadInt32();
+        var s1 = archive.ReadFString();
+        var s2 = archive.ReadFString();
+        return;
+    }
+
+    public virtual void ParseTimecodeVersionedEvent(FArchive archive, EventInfo info)
+    {
+        // TODO: handle event data
+        var version = archive.ReadInt32();
+        var a = archive.ReadInt32();
+        var b = archive.ReadInt32();
+        return;
     }
 
     public virtual EncryptionKey ParseEncryptionKeyEvent(FArchive archive, EventInfo info) => new()

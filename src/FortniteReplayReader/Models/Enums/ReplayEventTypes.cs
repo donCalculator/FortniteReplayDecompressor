@@ -9,4 +9,6 @@ public static class ReplayEventTypes
     public const string CHARACTER_SAMPLE = "CharacterSampleMeta";
     public const string ZONE_UPDATE = "ZoneUpdate";
     public const string BATTLE_BUS = "BattleBusFlight";
+    public const string TIMECODE_VERSIONED_META = "TimecodeVersionedMeta";
+    public const string ADDITION_GFP_EVENT = "AdditionGFPEvent";
 }
