@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Unreal.Core.Contracts;
@@ -104,6 +104,18 @@ public class NetGuidCache
         return group;
     }
 
+    // hacky way to handle redirects for weird NetFieldExportGroups
+    public string? GetRedirectForPath(string path)
+    {
+        switch (path)
+        {
+            case "HabaneroPlayerStateComponent":
+                return "/Script/FortniteGame.FortPlayerStateComponent_Habanero";
+            default:
+                return null;
+        }
+    }
+
     /// <summary>
     /// Get the <see cref="NetFieldExportGroup"/> by the Actor guid.
     /// </summary>
@@ -133,6 +145,19 @@ public class NetGuidCache
             {
                 _archTypeToExportGroup[netguid.Value] = NetFieldExportGroupMapPathFixed[netguid.Value];
                 return group;
+            }
+
+            string? redirect = GetRedirectForPath(path);
+
+            if (redirect is not null)
+            {
+                if (NetFieldExportGroupMap.ContainsKey(redirect))
+                {
+                    NetFieldExportGroupMapPathFixed[netguid.Value] = NetFieldExportGroupMap[redirect];
+                    _archTypeToExportGroup[netguid.Value] = NetFieldExportGroupMap[redirect];
+                    return NetFieldExportGroupMap[redirect];
+                }
+                return null;
             }
 
             foreach (var groupPathKvp in NetFieldExportGroupMap)

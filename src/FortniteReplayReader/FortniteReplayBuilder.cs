@@ -1,4 +1,4 @@
-﻿using FortniteReplayReader.Models;
+using FortniteReplayReader.Models;
 using FortniteReplayReader.Models.NetFieldExports;
 using FortniteReplayReader.Models.NetFieldExports.Weapons;
 using System.Collections.Generic;
@@ -299,6 +299,13 @@ public class FortniteReplayBuilder
 
         KillFeed.Add(entry);
     }
+
+    public void UpdateRankedRank(uint channelIndex, HabaneroPlayerStateComponent habanero)
+    {
+        _players[channelIndex].RankedRank = habanero;
+        return;
+    }
+
 
     public void UpdatePlayerPawn(uint channelIndex, PlayerPawn pawn)
     {

@@ -1,4 +1,4 @@
-﻿using FortniteReplayReader.Exceptions;
+using FortniteReplayReader.Exceptions;
 using FortniteReplayReader.Extensions;
 using FortniteReplayReader.Models;
 using FortniteReplayReader.Models.Enums;
@@ -112,6 +112,9 @@ public class ReplayReader : Unreal.Core.ReplayReader<FortniteReplay>
                 break;
             case PlayerPawn pawn:
                 Builder.UpdatePlayerPawn(channelIndex, pawn);
+                break;
+            case HabaneroPlayerStateComponent habanero:
+                Builder.UpdateRankedRank(channelIndex, habanero);
                 break;
             //case FortPickup pickup:
             //Builder.CreatePickupEvent(channelIndex, pickup);
