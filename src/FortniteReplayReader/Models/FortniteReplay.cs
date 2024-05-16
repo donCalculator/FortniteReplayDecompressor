@@ -42,6 +42,11 @@ public class FortniteReplay : Replay
     public IList<KillFeedEntry> KillFeed { get; internal set; } = new List<KillFeedEntry>();
 
     /// <summary>
+    /// Damage cues between players
+    /// </summary>
+    public IList<DamageCue> DamageCues { get; internal set; } = new List<DamageCue>();
+
+    /// <summary>
     /// Map information
     /// </summary>
     public MapData MapData { get; internal set; } = new MapData();

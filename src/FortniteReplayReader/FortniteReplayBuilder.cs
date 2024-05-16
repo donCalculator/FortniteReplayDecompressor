@@ -15,8 +15,10 @@ public class FortniteReplayBuilder
     private readonly GameData GameData = new();
     private readonly MapData MapData = new();
     private readonly List<KillFeedEntry> KillFeed = new();
+    private readonly List<DamageCue> DamageCues = new();
 
     private readonly Dictionary<uint, uint> _actorToChannel = new();
+    private readonly Dictionary<uint, string> _actorIdToPath = new();
     private readonly Dictionary<uint, uint> _channelToActor = new();
     private readonly Dictionary<uint, uint> _pawnChannelToStateChannel = new();
 
@@ -24,6 +26,7 @@ public class FortniteReplayBuilder
     /// Sometimes we receive a PlayerPawn but we havent received the PlayerState yet, so we dont want to processes these yet.
     /// </summary>
     private readonly Dictionary<uint, List<QueuedPlayerPawn>> _queuedPlayerPawns = new();
+    private readonly Dictionary<uint, List<BatchedDamageCues>> _queuedDamageCues = new();
 
     private readonly HashSet<uint> _onlySpectatingPlayers = new();
     private readonly HashSet<uint> _nonPlayerCharacters = new();
@@ -39,6 +42,12 @@ public class FortniteReplayBuilder
 
     private float? ReplicatedWorldTimeSeconds = 0;
     private double? ReplicatedWorldTimeSecondsDouble = 0;
+
+    public void SavePathToActorId(uint actorId, string path)
+    {
+        if (_actorIdToPath.ContainsKey(actorId)) { return; }
+        _actorIdToPath.Add(actorId, path);
+    }
 
     public void AddActorChannel(uint channelIndex, uint guid)
     {
@@ -65,6 +74,7 @@ public class FortniteReplayBuilder
         replay.KillFeed = KillFeed;
         replay.TeamData = _teams.Values;
         replay.PlayerData = _players.Values;
+        replay.DamageCues = DamageCues;
         return replay;
     }
 
@@ -318,6 +328,37 @@ public class FortniteReplayBuilder
         return;
     }
 
+    public bool UpdateDamageCues(uint channelIndex, BatchedDamageCues batchedDamageCue) {
+        // don't save 0 damagecues
+        if (batchedDamageCue.Magnitude == 0.0)
+        {
+            return true;
+        }       
+        
+        if (_pawnChannelToStateChannel.TryGetValue(channelIndex, out var stateChannel)
+            && _players.TryGetValue(stateChannel, out var statePlayer) 
+            && batchedDamageCue.HitActor.HasValue 
+            && _actorToChannel.TryGetValue(batchedDamageCue.HitActor ?? 0, out var chFromActor) 
+            && _pawnChannelToStateChannel.TryGetValue(chFromActor, out var stateCh) 
+            && _actorIdToPath.TryGetValue(batchedDamageCue.HitActor ?? 0, out var actorPath))
+        {
+            DamageCues.Add(new DamageCue()
+            {
+                ReplicatedWorldTimeSecondsDouble = ReplicatedWorldTimeSecondsDouble,
+                damageSourcePlayer = statePlayer.EpicId,
+                damageTargetPlayer = _players[stateCh].EpicId,
+                damageMagnitude = batchedDamageCue.Magnitude,
+                bIsCritical = batchedDamageCue.bIsCritical,
+                bIsFatal = batchedDamageCue.bIsFatal,
+                bIsShield = batchedDamageCue.bIsShield,
+                bIsShieldDestroyed = batchedDamageCue.bIsShieldDestroyed,
+                bIsHitActorPlayer = actorPath == "PlayerPawn_Athena_C" ? true : false,
+            });
+            return true;
+        }
+        return false;
+
+    }
 
     public void UpdatePlayerPawn(uint channelIndex, PlayerPawn pawn)
     {

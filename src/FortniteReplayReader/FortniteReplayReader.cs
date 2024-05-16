@@ -62,6 +62,11 @@ public class ReplayReader : Unreal.Core.ReplayReader<FortniteReplay>
         }
     }
 
+    protected override void SavePathToActorId(uint actorId, string path)
+    {
+        Builder.SavePathToActorId(actorId, path);
+    }
+
     protected override void OnChannelOpened(uint channelIndex, NetworkGUID? actor)
     {
         if (actor != null)
@@ -115,6 +120,9 @@ public class ReplayReader : Unreal.Core.ReplayReader<FortniteReplay>
                 break;
             case HabaneroPlayerStateComponent habanero:
                 Builder.UpdateRankedRank(channelIndex, habanero);
+                break;
+            case BatchedDamageCues batchedDamageCues:
+                Builder.UpdateDamageCues(channelIndex, batchedDamageCues);
                 break;
             //case FortPickup pickup:
             //Builder.CreatePickupEvent(channelIndex, pickup);

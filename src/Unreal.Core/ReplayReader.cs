@@ -1235,6 +1235,7 @@ public abstract class ReplayReader<T> where T : Replay, new()
             // see https://github.com/EpicGames/UnrealEngine/blob/6c20d9831a968ad3cb156442bebb41a883e62152/Engine/Source/Runtime/Engine/Private/PlayerController.cpp#L1338
             if (_netGuidCache.TryGetPathName(channel.ArchetypeId ?? 0, out var path))
             {
+                SavePathToActorId(inActor.ActorNetGUID.Value, path);
                 if (_netFieldParser.PlayerControllerGroups.Contains(path))
                 {
                     // netPlayerIndex
@@ -2186,6 +2187,11 @@ public abstract class ReplayReader<T> where T : Replay, new()
     /// Useful to minimize the parsing, e.g. if you're only interested in the initial values and not subsequent updates. 
     /// </summary>
     protected virtual bool IgnoreGroupOnChannel(uint channelIndex, INetFieldExportGroup exportGroup) => true;
+
+    protected virtual void SavePathToActorId(uint actorId, string path)
+    {
+
+    }
 
     /// <summary>
     /// Notifies when a new actor channel is created.
