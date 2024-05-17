@@ -325,7 +325,7 @@ public class FortniteReplayBuilder
 
     public void UpdateRankedRank(uint channelIndex, HabaneroPlayerStateComponent habanero)
     {
-        _players[channelIndex].RankedRank = habanero;
+        _players[channelIndex].RankedRank = new HabaneroRank() { currentDivision = habanero.Rank, rankingType = habanero.RankType};
         return;
     }
 

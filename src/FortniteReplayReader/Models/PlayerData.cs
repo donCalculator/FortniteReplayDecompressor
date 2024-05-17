@@ -76,7 +76,7 @@ public class PlayerData
     public uint? CurrentWeapon { get; internal set; }
 
     public IList<PlayerMovement> Locations { get; set; } = new List<PlayerMovement>();
-    public HabaneroPlayerStateComponent RankedRank { get; set; }
+    public HabaneroRank RankedRank { get; set; }
 }
 
 public class Cosmetics
