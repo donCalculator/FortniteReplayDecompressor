@@ -210,7 +210,7 @@ public class NetBitReader : BitReader
         {
             // If no type was encoded, assume default
             //TypeHash = UOnlineEngineInterface::Get()->GetReplicationHashForSubsystem(UOnlineEngineInterface::Get()->GetDefaultOnlineSubsystemName());
-            return "NULL";
+            return "null";
         }
 
         var bValidTypeHash = typeHash != 0;
@@ -229,11 +229,11 @@ public class NetBitReader : BitReader
             if (encoded)
             {
                 var encodedSize = ReadByte();
-                return ReadBytesToString(encodedSize);
+                return ReadBytesToString(encodedSize).ToLower();
             }
             else
             {
-                return ReadFString();
+                return ReadFString().ToLower();
             }
         }
 
