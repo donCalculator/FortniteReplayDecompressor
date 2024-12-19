@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Interfaces to support proper DI
 - Register types to be parsed with DI
 
+## [2.4.0] - 2024-11-13
+### Changed
+- support .net9
+- fix parsing of `FRepMovement` with `RepMoveOptionalAcceleration` (thanks @Zaid)
+
+### Removed 
+- support .net6
+
+## [2.3.1] - 2024-11-08
+### Changed
+- fix parsing of `FGameplayTag` with new `bUseDynamicReplication`
+
+## [2.3.0] - 2024-11-05
+### Changed
+- add support for Fortnite v32 (see [issue 58](https://github.com/Shiqan/FortniteReplayDecompressor/issues/58)) (by [SL-x-TnT](https://github.com/SL-x-TnT))
+
 ## [2.2.2] - 2024-03-31
 ### Changed
 - fix `ParseElimination` (see [issue 55](https://github.com/Shiqan/FortniteReplayDecompressor/issues/55))
@@ -27,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.8] - 2023-09-10
 ### Changed
-- add support for v26.00
+- add support for Fortnite v26
 
 ## [2.0.7] - 2023-09-10
 ### Changed
@@ -35,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.6] - 2023-06-10
 ### Changed
-- adding support for v25.00
+- adding support for Fortnite v25
 
 ## [2.0.5] - 2022-12-04
 ### Changed
@@ -131,3 +147,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.2.0]: https://github.com/Shiqan/FortniteReplayDecompressor/releases/tag/2.2.0
 [2.2.1]: https://github.com/Shiqan/FortniteReplayDecompressor/releases/tag/2.2.1
 [2.2.2]: https://github.com/Shiqan/FortniteReplayDecompressor/releases/tag/2.2.2
+[2.3.1]: https://github.com/Shiqan/FortniteReplayDecompressor/releases/tag/2.3.0
+[2.3.1]: https://github.com/Shiqan/FortniteReplayDecompressor/releases/tag/2.3.1
+[2.4.0]: https://github.com/Shiqan/FortniteReplayDecompressor/releases/tag/2.4.0
