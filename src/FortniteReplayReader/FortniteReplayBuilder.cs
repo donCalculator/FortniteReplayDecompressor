@@ -28,6 +28,7 @@ public class FortniteReplayBuilder
     /// </summary>
     private readonly Dictionary<uint, List<QueuedPlayerPawn>> _queuedPlayerPawns = new();
     private readonly Dictionary<uint, List<BatchedDamageCues>> _queuedDamageCues = new();
+    private readonly Dictionary<uint, List<FortClientObservedStat>> _queuedClientObservedStats = new();
 
     private readonly HashSet<uint> _onlySpectatingPlayers = new();
     private readonly HashSet<uint> _nonPlayerCharacters = new();
@@ -359,6 +360,46 @@ public class FortniteReplayBuilder
         }
         return false;
 
+    }
+    public void UpdateObservedClientStats(uint channelIndex, FortClientObservedStat fortClientObservedStat)
+    {
+        if (_pawnChannelToStateChannel.TryGetValue(channelIndex, out var stateChannel)
+            && _players.TryGetValue(stateChannel, out var statePlayer) && statePlayer is not null)
+        {
+            statePlayer.ClientStats[fortClientObservedStat.StatName] = fortClientObservedStat.StatValue ?? 0;
+        }
+        else
+        {
+            // statePlayer not found, queue the stats
+            if (!_queuedClientObservedStats.TryGetValue(channelIndex, out var clientObservedStats))
+            {
+                clientObservedStats = new List<FortClientObservedStat>();
+                _queuedClientObservedStats[channelIndex] = clientObservedStats;
+            } else
+            {
+                clientObservedStats.Add(fortClientObservedStat);
+            }
+
+        }
+
+        // trying to process queued stats
+        List<uint> processedCh = new List<uint>();
+        foreach (var chIdx in _queuedClientObservedStats.Keys)
+        {
+            if (_pawnChannelToStateChannel.TryGetValue(chIdx, out var stateCh)
+                && _players.TryGetValue(stateCh, out var stPlayer) && stPlayer is not null)
+            {
+                foreach (FortClientObservedStat stat in _queuedClientObservedStats[chIdx])
+                {
+                    stPlayer.ClientStats[stat.StatName] = stat.StatValue ?? 0;
+                }
+                processedCh.Add(chIdx);
+            }
+        }
+        foreach (uint chIdx in processedCh)
+        {
+            _queuedClientObservedStats.Remove(chIdx);
+        }
     }
 
     public void UpdatePlayerPawn(uint channelIndex, PlayerPawn pawn)

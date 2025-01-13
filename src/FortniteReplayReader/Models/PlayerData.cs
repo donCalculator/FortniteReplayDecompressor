@@ -77,6 +77,7 @@ public class PlayerData
 
     public IList<PlayerMovement> Locations { get; set; } = new List<PlayerMovement>();
     public HabaneroRank RankedRank { get; set; }
+    public Dictionary<string, int> ClientStats { get; set; } = new Dictionary<string, int>();
 }
 
 public class Cosmetics

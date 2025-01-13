@@ -91,6 +91,9 @@ public class ReplayReader : Unreal.Core.ReplayReader<FortniteReplay>
             case ActiveGameplayModifier modifier:
                 Builder.UpdateGameplayModifiers(modifier);
                 break;
+            case FortClientObservedStat fortClientObservedStat:
+                Builder.UpdateObservedClientStats(channelIndex, fortClientObservedStat);
+                break;
             //case FortPickup pickup:
             //Builder.CreatePickupEvent(channelIndex, pickup);
             //break;
